@@ -6,25 +6,6 @@ class AnonymizeFields extends Process {
   private $fieldsToAnonymize;
   public $textFields = array('FieldtypeTextarea', 'FieldtypeTextareaLanguage', 'FieldtypeTextLanguage', 'FieldtypeText');
 
-  public static function getModuleInfo() {
-
-    return array(
-      'title' => 'Anonymize fields (DSGVO, GDPR)',
-      'author' => 'Jens Martsch',
-      'version' => '1.0.1',
-      'summary' => __('Clears or anonymizes fields with user identifiable data and additionally deletes all files if you selected a file field'),
-      'singular' => true,
-      'autoload' => true,
-      'installs' => array(
-        'LazyCron',
-      ),
-      'requires' => array(
-        'ProcessWire>=3.0.0',
-      ),
-    );
-  }
-
-
   public function ready() {
     $this->addHook("LazyCron::everyDay", $this, 'anonymize');
   }
