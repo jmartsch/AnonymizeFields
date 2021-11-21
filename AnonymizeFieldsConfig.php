@@ -19,22 +19,19 @@ class AnonymizeFieldsConfig extends ModuleConfig {
     $inputfields->add($f);
 
     $f = $this->modules->get('InputfieldAsmSelect');
-    // $f->type = 'InputfieldAsmSelect';
     $f->attr('name', 'fieldsToAnonymize');
     $f->label = 'Fields';
     $f->description = 'Which fields should be filled with the fillword?';
+    $f->notes = 'CAUTION!: If you select a file or image field, its contents get deleted';
 
     $fieldArray = array();
-
     // $allowedFieldtypes = array('InputfieldTextarea', 'FieldtypeTextareaLanguage', 'InputfieldFile', 'InputfieldImage', 'FieldtypeTextLanguage', 'FieldtypeText', 'FieldtypeEmail');
-
-    foreach ($this->pages->find('template=bewerbung')->fields as $field) {
-
-      // if (in_array($field->type, $allowedFieldtypes)) {
-      $fieldArray[ "$field->name" ] = "{$field->getLabel()} [$field->name]";
-      // $fieldArray["$field->name"] = "$field->name";
-
-      // }
+    $skipFieldtypes = ['FieldtypeModule', 'FieldtypeRepeater', 'FieldtypeFieldsetOpen', 'FieldtypeFieldsetClose', 'FieldtypeCheckbox', 'FieldtypePage'];
+    foreach ($this->wire('fields') as $field) {
+      if (in_array($field->type->className(), $skipFieldtypes)) {
+        continue;
+      }
+      $fieldArray[$field->name] = "{$field->getLabel()} [$field->name]";
     }
 
     $f->options = $fieldArray;

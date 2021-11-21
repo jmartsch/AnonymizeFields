@@ -11,7 +11,7 @@ class AnonymizeFields extends Process {
     return array(
       'title' => 'Anonymize fields (DSGVO, GDPR)',
       'author' => 'Jens Martsch',
-      'version' => '1.0.0',
+      'version' => '1.0.1',
       'summary' => __('Clears or anonymizes fields with user identifiable data and additionally deletes all files if you selected a file field'),
       'singular' => true,
       'autoload' => true,
@@ -30,7 +30,6 @@ class AnonymizeFields extends Process {
   }
 
   public function anonymize() {
-    $this->message(__("Fields with data older than $this->days have been anonymized."));
     $pages = wire('pages')->find("created<='-{$this->days} days'");
     foreach ($pages as $page) {
       $page->of(false);
@@ -57,5 +56,6 @@ class AnonymizeFields extends Process {
 //      $t = $this->database->query("DELETE FROM MarkupActivityLog WHERE `page_id` = $page->id"); // now delete the activity log if the module is installed
 //      $this->log->prune('sent-mail', $this->days); // delete logs of the last $this->days, if there is personal identifiable data in it
     }
+    $this->message(__("Fields with data older than $this->days have been anonymized."));
   }
 }
